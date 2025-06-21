@@ -107,11 +107,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\famal\\OneDrive\\Escritorio\\desarrollo\\C#\\Emulator\\Emulator.csproj",
+      "projectUniqueName": "C:\\Users\\famal\\OneDrive\\Escritorio\\desarrollo\\C#\\Chip8-Emulator\\Emulator.csproj",
       "projectName": "Emulator",
-      "projectPath": "C:\\Users\\famal\\OneDrive\\Escritorio\\desarrollo\\C#\\Emulator\\Emulator.csproj",
+      "projectPath": "C:\\Users\\famal\\OneDrive\\Escritorio\\desarrollo\\C#\\Chip8-Emulator\\Emulator.csproj",
       "packagesPath": "C:\\Users\\famal\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\famal\\OneDrive\\Escritorio\\desarrollo\\C#\\Emulator\\obj\\",
+      "outputPath": "C:\\Users\\famal\\OneDrive\\Escritorio\\desarrollo\\C#\\Chip8-Emulator\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\famal\\AppData\\Roaming\\NuGet\\NuGet.Config"
