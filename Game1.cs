@@ -1,7 +1,6 @@
 ﻿using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
-using Chip8Emu.output;
 using Chip8Emu;
 
 namespace Emulator;
@@ -23,14 +22,14 @@ public class Game1 : Game
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
-
+        chip8 = new(100, 100, GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Width / 2);
         base.Initialize();
     }
 
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-        chip8 = new(Content, GraphicsDevice, 100, 100, GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Height / 2);
+        chip8.Load(Content, GraphicsDevice);
         // TODO: use this.Content to load your game content here
     }
 

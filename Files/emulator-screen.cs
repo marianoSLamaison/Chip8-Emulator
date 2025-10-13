@@ -13,13 +13,14 @@ class Chip8Screen
     const byte scr_width = 64;
     const byte scr_heigth = 32;
     const byte scr_w_bytes = scr_width / bits_in_byte;
-    byte[] screen_state; 
-    public Chip8Screen(GraphicsDevice g, int x, int y, int _scr_width, int _scr_heigth)
+    byte[] screen_state;
+    public Chip8Screen(int x, int y, int _scr_width, int _scr_heigth)
     {
         position = new(x, y);
-        pixel_rect = new(position, new(_scr_width / scr_width, _scr_heigth / scr_heigth));
-        pixel = new(g, 1, 1);
-        pixel.SetData(new Color[] { Color.White });
+        int min_dim = MathHelper.Min(_scr_width / scr_width, _scr_heigth / scr_heigth);
+        pixel_rect = new(position, new(min_dim));
+        
+        
         //scr_w_bytes * scr_h_bytes
         screen_state = new byte[scr_w_bytes * scr_heigth]{
         0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00,
@@ -56,6 +57,13 @@ class Chip8Screen
         0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe,}
         ;
     }
+    
+    public void Load(GraphicsDevice g)
+    {
+        pixel = new(g, 1, 1);
+        pixel.SetData(new Color[] { Color.White });
+    }
+
     public void Draw(SpriteBatch g)
     {
         int current_pixel;
