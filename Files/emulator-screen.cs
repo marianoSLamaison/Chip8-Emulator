@@ -57,7 +57,10 @@ class Chip8Screen
         0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe, 0xfe,}
         ;
     }
-    
+    public void Clear()
+    {
+        screen_state = new byte[scr_w_bytes * scr_heigth];
+    }
     public void Load(GraphicsDevice g)
     {
         pixel = new(g, 1, 1);
