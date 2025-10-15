@@ -57,43 +57,7 @@ partial class Cpu
     /// <param name="inst"></param>
     private void execute(Chip8DecodedInst inst)
     {
-        switch ((OP_FAMILY)inst.OpFamily)
-        {
-            case OP_FAMILY.OP0:
-                break;
-            case OP_FAMILY.OP1:
-                break;
-            case OP_FAMILY.OP2:
-                break;
-            case OP_FAMILY.OP3:
-                break;
-            case OP_FAMILY.OP4:
-                break;
-            case OP_FAMILY.OP5:
-                break;
-            case OP_FAMILY.OP6:
-                break;
-            case OP_FAMILY.OP7:
-                break;
-            case OP_FAMILY.OP8:
-                break;
-            case OP_FAMILY.OP9:
-                break;
-            case OP_FAMILY.OPA:
-                break;
-            case OP_FAMILY.OPB:
-                break;
-            case OP_FAMILY.OPC:
-                break;
-            case OP_FAMILY.OPD:
-                break;
-            case OP_FAMILY.OPE:
-                break;
-            case OP_FAMILY.OPF:
-                break;
-            default:
-                throw new("Invalide OP code");
-        }
+        _function_runner.ExecuteInstruction(this , inst);
     }
     public void Update(GameTime t)
     {
@@ -107,7 +71,7 @@ partial class Cpu
     
     public void Draw(SpriteBatch s)
     {
-        
+        _screen.Draw(s, _mem.GetScreenState());
     }
 
 }
