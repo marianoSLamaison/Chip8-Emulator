@@ -2,7 +2,7 @@ using System;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
 
-namespace Chip8Emu.output;
+namespace Chip8Emu.IO;
 
 class Chip8Screen
 {
