@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 
 namespace Chip8Emu.cpu.Operations;
@@ -16,6 +17,7 @@ class FunctionRunner
     }
     public void ExecuteInstruction(Cpu c, Chip8DecodedInst inst)
     {
+        Console.WriteLine("The family on execution is {0:X}", inst.OpFamily);
         switch ((OP_FAMILY)inst.OpFamily)
         {
             case OP_FAMILY.OP0:
@@ -72,9 +74,11 @@ class FunctionRunner
     }
     public void Family0Execute(Cpu context, ushort args)
     {
+
         switch (args)
         {
             case 0x0E0:
+                Console.WriteLine("Clear the screen");
                 context.ClearScreen();
                 break;
             case 0x0EE:
@@ -87,6 +91,7 @@ class FunctionRunner
     }
     public void Family1Execute(Cpu c, ushort args)
     {
+        Console.WriteLine("Direction to jump = {0:x}", args);
         c.InternalJump(args);
     }
     public void Family2Execute(Cpu c, ushort args)
@@ -115,6 +120,7 @@ class FunctionRunner
     {
         byte reg_id = (byte)BitHelper.GetMaskValue(args, _nible_mask, _nible_size * 2);
         byte data = (byte)BitHelper.GetMaskValue(args, _byte_mask, 0x0);
+        Console.WriteLine("The values for the ref ar Reg_id = {0:x}, RegData = {1:x}", reg_id, data);
         c.StoreInReg(reg_id, data);
     }
     public void Family7Execute(Cpu c, ushort args)
@@ -189,6 +195,7 @@ class FunctionRunner
         regX_id = (byte)BitHelper.GetMaskValue(args, _nible_mask, _nible_size * 2);
         regY_id = (byte)BitHelper.GetMaskValue(args, _nible_mask, _nible_size);
         img_heigth = (byte)BitHelper.GetMaskValue(args, _nible_mask, 0x0);
+        Console.WriteLine("Raw = {0:X}, POsx = {1:X}, POsy = {2:X}, ImgHegth = {3:X}", args,regX_id, regY_id, img_heigth);
         c.DrawToScreen(regX_id, regY_id, img_heigth);
     }
     public void FamilyEExecute(Cpu c, ushort args)

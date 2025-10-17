@@ -9,7 +9,7 @@ public class Game1 : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
-    private CHIP8_CPU chip8;
+    private Chip8Emu.cpu.Cpu chip8;
 
     public Game1()
     {
@@ -22,7 +22,7 @@ public class Game1 : Game
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
-        chip8 = new(100, 100, GraphicsDevice.Viewport.Width / 2, GraphicsDevice.Viewport.Width / 2);
+        chip8 = new(GraphicsDevice.Viewport, new(100,100));
         base.Initialize();
     }
 
@@ -37,7 +37,7 @@ public class Game1 : Game
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
-
+        chip8.Update(gameTime);
         // TODO: Add your update logic here
 
         base.Update(gameTime);
