@@ -19,3 +19,6 @@
 #begin tests/2-ibm-logo.ch8
 /copy:tests/2-ibm-logo.ch8
 
+#begin tests/3-corax+.ch8
+/copy:tests/3-corax+.ch8
+

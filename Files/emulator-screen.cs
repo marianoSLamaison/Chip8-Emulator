@@ -33,7 +33,6 @@ class Chip8Screen
         bool _pixels_have_been_set = false;
         byte _current_cell;
         byte _current_y, _current_x_cell, _current_x_bit;
-        Console.WriteLine("PosRec = ({0:x}; {1:x})", x_pos, y_pos);
         for (int i=0; i<sprite.Length; i++)
         {
             _current_y = (byte)((y_pos + i) % _scr_heigth_bytes);
@@ -42,8 +41,8 @@ class Chip8Screen
                 _current_x_cell = (byte)((x_pos + 7 - j) / _num_blocks_per_row);
                 _current_x_bit = (byte)((x_pos + 7-j) % 8);
                 _current_cell = (byte)(_current_y * _num_blocks_per_row + _current_x_cell);
+                _pixels_have_been_set = (byte)((((sprite[i] >> j) & 0x1) << _current_x_bit) & buffer[_current_cell]) != 0;
                 buffer[_current_cell] ^= (byte)(((sprite[i] >> j) & 0x1) << _current_x_bit);
-                
             }
         }
         return _pixels_have_been_set;

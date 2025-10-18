@@ -58,6 +58,10 @@ class Memory
         _mem[dir] = (byte)BitHelper.GetMaskValue(arg, _by_mask, _by_size);
         _mem[dir + 1] = (byte)BitHelper.GetMaskValue(arg, _by_mask, 0x00);
     }
+    public void WriteByte(ushort dir, byte arg)
+    {
+        _mem[dir] = arg;
+    }
     /// <summary>
     /// Reads a data from the memory
     /// </summary>
@@ -65,7 +69,7 @@ class Memory
     /// <returns></returns>
     public ushort Read(ushort dir)
     {
-        return (ushort)((_mem[dir] << _by_size) + _mem[dir + 1]);
+        return (ushort)((ushort)(_mem[dir] << _by_size) + (ushort)_mem[dir + 1]);
     }
     public byte ReadByte(ushort dir)
     {

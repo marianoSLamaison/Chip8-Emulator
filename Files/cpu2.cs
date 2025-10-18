@@ -7,13 +7,13 @@ partial class Cpu
 {
     public void LoadStateUpToReg(byte reg)
     {
-        for (int i=0; i<reg; i++)
+        for (int i=0; i<=reg; i++)
             _v[i] = _mem.ReadByte((byte)(_mar + i));
     }
     public void SaveStateUpToReg(byte reg)
     {
-        for (int i=0; i<reg; i++)
-            _mem.Write((byte)(_mar + i), _v[i]); 
+        for (int i=0; i<=reg; i++)
+            _mem.WriteByte((byte)(_mar + i), _v[i]); 
     }
     private Queue<byte> BinaryCodedDecimal(byte val)
     {
@@ -74,12 +74,12 @@ partial class Cpu
     public void SkipIfKeyNotPressed(byte key_code)
     {
         if (!_keyboard.IsKeyPadPressed(key_code))
-            _ir += 2 * _inst_size;
+            _ir +=  _inst_size;
     }
     public void SkipIfKeyPressed(byte key_code)
     {
         if (_keyboard.IsKeyPadPressed(key_code))
-            _ir += 2*_inst_size;
+            _ir += _inst_size;
     }
     public void DrawToScreen(byte regX_id, byte regY_id, byte img_heigth)
     {
@@ -93,16 +93,16 @@ partial class Cpu
     public void JumpBaseV0(ushort args)
     {
         _ir = (ushort)(args + _v[0x00]);
+        _automatically_increment = false;
     }
     public void StoreMemoryAdress(ushort args)
     {
-
         _mar = args;
     }
     public void EsquipIfRegXNotEqualToRegY(byte RegXId, byte RegYId)
     {
         if (_v[RegXId] != _v[RegYId])
-            _ir += 2 * _inst_size;
+            _ir +=  _inst_size;
     }
     public void StoreLefthShifthedVYinVX(byte regx_id, byte regy_id)
     {
@@ -170,9 +170,7 @@ partial class Cpu
     }
     public void AddToReg(byte reg_id, byte data)
     {
-        Console.WriteLine("El valor a sumar es <{0:X}>, el valor del reg es <{1:X}>", data, _v[reg_id]);
         _v[reg_id] += data;
-        Console.WriteLine("El valor resultante es <{0:X}>", _v[reg_id]);
     }
     public void StoreInReg(byte reg_id, byte data)
     {
@@ -181,28 +179,28 @@ partial class Cpu
     public void EsquipIfRegXEcualsRegY(byte regX_id, byte regY_id)
     {
         if (_v[regX_id] == _v[regY_id])
-            _ir += 2*_inst_size;
+            _ir += _inst_size;
     }
     public void EsquipIfNotEcuals(byte reg_id, byte data)
     {
         if (_v[reg_id] != data)
-            _ir += 2*_inst_size;
+            _ir += _inst_size;
     }
     public void EsquipIfEcuals(byte reg_id, byte data)
     {
         if (_v[reg_id] == data)
-            _ir += 2*_inst_size;
+            _ir += _inst_size;
     }
     public void ExecuteInternalSubroutine(ushort direction)
     {
-        //escribimos en el stack
-        _mem.Write((ushort)(_stack_start + _sp), ++_ir);
+        _mem.Write((ushort)(_stack_start + _sp++), (ushort)(_ir + _inst_size));
         _ir = direction;
+        _automatically_increment = false;
     }
     public void InternalJump(ushort direction)
     {
         _ir = direction;
-        
+        _automatically_increment = false;
     }
     public void ClearScreen()
     {
@@ -211,7 +209,10 @@ partial class Cpu
     public void PopStack()
     {
         if (_sp >= 1)
+        {
             _ir = _mem.Read((ushort)(_stack_start + --_sp));
+            _automatically_increment = false;
+        }
         else
             throw new("Atempted to pop an empty stack (CHIP8)");
     }

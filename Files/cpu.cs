@@ -23,6 +23,7 @@ partial class Cpu
     public byte _sound_timer;
     ///////////////////////////////////////////////////////////
     private float _time_between_frames = 0.0f;
+    private bool _automatically_increment = true;
 
     public Cpu(Viewport view, Point position)
     {
@@ -41,10 +42,16 @@ partial class Cpu
     public void Instruction_cicle()
     {
         ushort raw_inst = fetch();
+        Console.WriteLine("Instruccion = {0:x}", raw_inst);
         Chip8DecodedInst inst = decode(raw_inst);
         execute(inst);
-        _ir+=_inst_size;
-        _ir = (ushort)(_ir >= 4096 - _inst_size ? 0x200 : _ir);
+        if (_automatically_increment)
+        {
+            _ir += _inst_size;
+            _ir = (ushort)(_ir >= 4096 - _inst_size ? 0x200 : _ir);
+        }
+        else
+            _automatically_increment = true;
     }
     private ushort fetch() => _mem.Read(_ir);
     private Chip8DecodedInst decode(ushort inst)
@@ -67,7 +74,7 @@ partial class Cpu
     }
     public void Update(GameTime t)
     {
-        if (_time_between_frames > 0.4)
+        if (_time_between_frames > 0.1)
         {
             _time_between_frames = 0.0f;
             Instruction_cicle();
@@ -77,7 +84,7 @@ partial class Cpu
 
     public void Load(ContentManager c, GraphicsDevice g)
     {
-        _mem.Load("tests/2-ibm-logo.ch8", c);
+        _mem.Load("tests/3-corax+.ch8", c);
         _screen.Load(g);
     }
     
