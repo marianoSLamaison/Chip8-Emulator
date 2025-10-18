@@ -53,7 +53,7 @@ partial class Cpu
     }
     public void AddToMar(byte reg)
     {
-        _mar += reg;
+        _mar += _v[reg];
     }
     public void SetSoundTimer(byte reg)
     {
@@ -83,7 +83,6 @@ partial class Cpu
     }
     public void DrawToScreen(byte regX_id, byte regY_id, byte img_heigth)
     {
-
         _v[0x0F] = (byte)(_screen.SetPixel(_mem.GetScreenState(), _mem.GetSprite(_mar, img_heigth), _v[regX_id], _v[regY_id]) ? 1 : 0);
     }
     public void RandomizeReg(byte reg_id, byte data)
@@ -97,6 +96,7 @@ partial class Cpu
     }
     public void StoreMemoryAdress(ushort args)
     {
+
         _mar = args;
     }
     public void EsquipIfRegXNotEqualToRegY(byte RegXId, byte RegYId)
@@ -170,7 +170,9 @@ partial class Cpu
     }
     public void AddToReg(byte reg_id, byte data)
     {
+        Console.WriteLine("El valor a sumar es <{0:X}>, el valor del reg es <{1:X}>", data, _v[reg_id]);
         _v[reg_id] += data;
+        Console.WriteLine("El valor resultante es <{0:X}>", _v[reg_id]);
     }
     public void StoreInReg(byte reg_id, byte data)
     {

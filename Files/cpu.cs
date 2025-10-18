@@ -67,7 +67,7 @@ partial class Cpu
     }
     public void Update(GameTime t)
     {
-        if (_time_between_frames > 0.8)
+        if (_time_between_frames > 0.4)
         {
             _time_between_frames = 0.0f;
             Instruction_cicle();
@@ -77,7 +77,7 @@ partial class Cpu
 
     public void Load(ContentManager c, GraphicsDevice g)
     {
-        _mem.Load("tests/1-chip8-logo.ch8", c);
+        _mem.Load("tests/2-ibm-logo.ch8", c);
         _screen.Load(g);
     }
     

@@ -195,7 +195,6 @@ class FunctionRunner
         regX_id = (byte)BitHelper.GetMaskValue(args, _nible_mask, _nible_size * 2);
         regY_id = (byte)BitHelper.GetMaskValue(args, _nible_mask, _nible_size);
         img_heigth = (byte)BitHelper.GetMaskValue(args, _nible_mask, 0x0);
-        Console.WriteLine("Raw = {0:X}, POsx = {1:X}, POsy = {2:X}, ImgHegth = {3:X}", args,regX_id, regY_id, img_heigth);
         c.DrawToScreen(regX_id, regY_id, img_heigth);
     }
     public void FamilyEExecute(Cpu c, ushort args)
