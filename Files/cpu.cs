@@ -84,7 +84,7 @@ partial class Cpu
 
     public void Load(ContentManager c, GraphicsDevice g)
     {
-        _mem.Load("tests/3-corax+.ch8", c);
+        _mem.Load("tests/4-flags.ch8", c);
         _screen.Load(g);
     }
     

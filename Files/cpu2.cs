@@ -172,7 +172,9 @@ partial class Cpu
     }
     public void ExecuteInternalSubroutine(ushort direction)
     {
-        _mem.Write((ushort)(_stack_start + _sp++), (ushort)(_ir + _inst_size));
+        Console.WriteLine("Push. Stack had <{0:d}> elements inside", _sp);
+        _mem.Write((ushort)(_stack_start + (_sp) * _inst_size), (ushort)(_ir + _inst_size));
+        _sp++;
         _ir = direction;
         _automatically_increment = false;
     }
@@ -189,7 +191,8 @@ partial class Cpu
     {
         if (_sp >= 1)
         {
-            _ir = _mem.Read((ushort)(_stack_start + --_sp));
+            Console.WriteLine("Pop. Stack had <{0:d}> elements inside", _sp);
+            _ir = _mem.Read((ushort)(_stack_start + (--_sp)*_inst_size));
             _automatically_increment = false;
         }
         else
