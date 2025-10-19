@@ -8,44 +8,22 @@ partial class Cpu
     public void LoadStateUpToReg(byte reg)
     {
         for (int i=0; i<=reg; i++)
-            _v[i] = _mem.ReadByte((byte)(_mar + i));
+            _v[i] = _mem.ReadByte((ushort)(_mar + i));
     }
     public void SaveStateUpToReg(byte reg)
     {
         for (int i=0; i<=reg; i++)
-            _mem.WriteByte((byte)(_mar + i), _v[i]); 
-    }
-    private Queue<byte> BinaryCodedDecimal(byte val)
-    {
-        Queue<byte> digits = new();
-        Queue<byte> coded_units = new();
-        while (val != 0)
-        {
-            digits.Enqueue((byte)(val % 10));
-            val /= 10;
-        }
-        while (digits.Count != 0)
-        {
-            byte _coded_digits = 0;
-            if (digits.Count > 1)
-            {
-                byte digit1 = digits.Dequeue();
-                byte digit2 = digits.Dequeue();
-                _coded_digits = (byte)(digit1 + (digit2 << 0x4));
-                coded_units.Enqueue(_coded_digits);
-            }
-            else
-                coded_units.Enqueue(digits.Dequeue());
-        }
-        return coded_units;
-        
-        
+            _mem.WriteByte((ushort)(_mar + i), _v[i]); 
     }
     public void StoreBinaryCodedDecimalFromReg(byte reg)
     {
-        Queue<byte> coded_number = BinaryCodedDecimal(reg);
-        for (int i=0; coded_number.Count != 0; i++)
-            _mem.Write((byte)(_mar + i), coded_number.Dequeue());
+        byte hundreds, tens, ones;
+        hundreds = (byte)(_v[reg] / 100);
+        tens = (byte)((_v[reg] / 10) % 10);
+        ones = (byte)(_v[reg] % 10);
+        _mem.WriteByte(_mar, hundreds);
+        _mem.WriteByte((ushort)(_mar + 1), tens);
+        _mem.WriteByte((ushort)(_mar + 2), ones);
     }
     public void SetMarToSpriteData(byte reg)
     {
@@ -107,15 +85,16 @@ partial class Cpu
     public void StoreLefthShifthedVYinVX(byte regx_id, byte regy_id)
     {
         _v[0x0F] = (byte)(regy_id & 0x80 >> 0x7);
-        _v[regx_id] = (byte)(_v[regy_id] >> 0x01);
+        _v[regx_id] = (byte)(_v[regy_id] << 0x01);
     }
     public void SubtracRegXfromRegY(byte regx_id, byte regy_id)
     {
         ushort oldv1 = _v[regx_id], oldv2 = _v[regy_id];
         unchecked
         {
-            _v[regx_id] =  (byte)(_v[regx_id] - _v[regx_id]);
+            _v[regx_id] = (byte)(_v[regy_id] - _v[regx_id]);
         }
+        Console.WriteLine("Needs a burrow to work = {0:b}", BitHelper.SubtractionNeedsBorrows(oldv2, oldv1));
         if (BitHelper.SubtractionNeedsBorrows(oldv2, oldv1))
             _v[0xF] = 0;
         else
@@ -124,7 +103,7 @@ partial class Cpu
     public void StoreRigthShiftedVYInVX(byte regx_id, byte regy_id)
     {
         _v[0x0F] = (byte)(regy_id & 0x01);
-        _v[regx_id] = (byte)(_v[regy_id] << 0x01);
+        _v[regx_id] = (byte)(_v[regy_id] >> 0x01);
     }
     public void SubtractRegYfromX(byte regx_id, byte regy_id)
     {
@@ -133,6 +112,7 @@ partial class Cpu
         {
             _v[regx_id] -= _v[regy_id];
         }
+        Console.WriteLine("Needs a burrow to work = {0:b}", BitHelper.SubtractionNeedsBorrows(oldv1, oldv2));
         if (BitHelper.SubtractionNeedsBorrows(oldv1, oldv2))
             _v[0xF] = 0;
         else
@@ -143,10 +123,9 @@ partial class Cpu
         ushort oldv1 = _v[regx_id], oldv2 = _v[regy_id];
         unchecked
         {
-
             _v[regx_id] += _v[regy_id];
-            
         }
+        Console.WriteLine("Results in carry = {0:b}", BitHelper.ResultsInCarry(oldv1, oldv2));
         if (BitHelper.ResultsInCarry(oldv1, oldv2))
             _v[0xF] = 1;
         else

@@ -22,3 +22,6 @@
 #begin tests/3-corax+.ch8
 /copy:tests/3-corax+.ch8
 
+#begin tests/4-flags.ch8
+/copy:tests/4-flags.ch8
+

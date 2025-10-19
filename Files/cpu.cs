@@ -42,7 +42,7 @@ partial class Cpu
     public void Instruction_cicle()
     {
         ushort raw_inst = fetch();
-        Console.WriteLine("Instruccion = {0:x}", raw_inst);
+        //Console.WriteLine("Instruccion = {0:x}", raw_inst);
         Chip8DecodedInst inst = decode(raw_inst);
         execute(inst);
         if (_automatically_increment)
@@ -74,7 +74,7 @@ partial class Cpu
     }
     public void Update(GameTime t)
     {
-        if (_time_between_frames > 0.1)
+        if (_time_between_frames > 0.05)
         {
             _time_between_frames = 0.0f;
             Instruction_cicle();
