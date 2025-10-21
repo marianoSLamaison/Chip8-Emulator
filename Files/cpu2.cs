@@ -84,8 +84,10 @@ partial class Cpu
     }
     public void StoreLefthShifthedVYinVX(byte regx_id, byte regy_id)
     {
-        _v[0x0F] = (byte)(regy_id & 0x80 >> 0x7);
+        byte holder = (byte)((_v[regy_id] & 0x80) >> 0x7);
         _v[regx_id] = (byte)(_v[regy_id] << 0x01);
+        _v[regy_id] = _v[regx_id];
+        _v[0x0F] = holder;
     }
     public void SubtracRegXfromRegY(byte regx_id, byte regy_id)
     {
@@ -102,8 +104,10 @@ partial class Cpu
     }
     public void StoreRigthShiftedVYInVX(byte regx_id, byte regy_id)
     {
-        _v[0x0F] = (byte)(regy_id & 0x01);
+        byte holder = (byte)(_v[regy_id] & 0x01);
         _v[regx_id] = (byte)(_v[regy_id] >> 0x01);
+        _v[regy_id] = _v[regx_id];
+        _v[0xF] = holder;
     }
     public void SubtractRegYfromX(byte regx_id, byte regy_id)
     {
@@ -120,16 +124,15 @@ partial class Cpu
     }
     public void AddRegisterYtoX(byte regx_id, byte regy_id)
     {
-        ushort oldv1 = _v[regx_id], oldv2 = _v[regy_id];
+        byte oldv1 = _v[regx_id], oldv2 = _v[regy_id];
         unchecked
         {
             _v[regx_id] += _v[regy_id];
         }
-        Console.WriteLine("Results in carry = {0:b}", BitHelper.ResultsInCarry(oldv1, oldv2));
-        if (BitHelper.ResultsInCarry(oldv1, oldv2))
-            _v[0xF] = 1;
+        if (BitHelper.ResultsInCarry(oldv1, _v[regx_id]))
+            _v[0xF] = 0x01;
         else
-            _v[0xF] = 0;
+            _v[0xF] = 0x00;
     }
     public void LogicalXorRegXY(byte regx_id, byte regy_id)
     {
@@ -172,7 +175,6 @@ partial class Cpu
     }
     public void ExecuteInternalSubroutine(ushort direction)
     {
-        Console.WriteLine("Push. Stack had <{0:d}> elements inside", _sp);
         _mem.Write((ushort)(_stack_start + (_sp) * _inst_size), (ushort)(_ir + _inst_size));
         _sp++;
         _ir = direction;
@@ -191,7 +193,6 @@ partial class Cpu
     {
         if (_sp >= 1)
         {
-            Console.WriteLine("Pop. Stack had <{0:d}> elements inside", _sp);
             _ir = _mem.Read((ushort)(_stack_start + (--_sp)*_inst_size));
             _automatically_increment = false;
         }

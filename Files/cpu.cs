@@ -74,7 +74,7 @@ partial class Cpu
     }
     public void Update(GameTime t)
     {
-        if (_time_between_frames > 0.05)
+        if (_time_between_frames > 0.01)
         {
             _time_between_frames = 0.0f;
             Instruction_cicle();
