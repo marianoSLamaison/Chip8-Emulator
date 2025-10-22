@@ -6,8 +6,8 @@ namespace Chip8Emu.cpu;
 
 class Memory
 {
-    private const ushort _mem_size = 4096;
-    private const ushort _display_space_start = 0xE8F;
+    private const ushort _mem_size = 7000;//4096;
+    private const ushort _display_space_start = 7000 - 64*32;//0xE8F ;
     private const ushort _user_space_start = 0x200;
     private const ushort _font_set_end = 0x80;
     private byte[] _mem;

@@ -74,7 +74,8 @@ partial class Cpu
     }
     public void Update(GameTime t)
     {
-        if (_time_between_frames > 0.01)
+        _keyboard.Update();
+        if (_time_between_frames > 1/60)
         {
             _time_between_frames = 0.0f;
             Instruction_cicle();
@@ -84,7 +85,7 @@ partial class Cpu
 
     public void Load(ContentManager c, GraphicsDevice g)
     {
-        _mem.Load("tests/4-flags.ch8", c);
+        _mem.Load("tests/5-quirks.ch8", c);
         _screen.Load(g);
     }
     

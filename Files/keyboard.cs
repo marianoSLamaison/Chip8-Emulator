@@ -1,56 +1,72 @@
 
 
+using System;
 using Microsoft.Xna.Framework.Input;
 
 namespace Chip8Emu.IO;
 
 class Chip8Keyboard
 {
-    KeyboardState kstate;
+    uint _keysStates;
+    byte _keyCode;
 
-    
-    public bool IsKeyPadPressed(byte key_code)
+    public void Update()
     {
-        //I know this could be all done in a more data driven way with config files and that,
-        //But the pain from dealing with seting that up now will aoutweigth the pain of doing this.
-        //I fix it in version 3.0
-        kstate = Keyboard.GetState();        
-        switch(key_code)
+        KeyboardState _kstat = Keyboard.GetState();
+        uint temp_state = 0;
+        foreach (Keys k in _kstat.GetPressedKeys())
         {
-            case 0x0:
-                return kstate.IsKeyDown(Keys.D0);
-            case 0x1:
-                return kstate.IsKeyDown(Keys.D1);
-            case 0x2:
-                return kstate.IsKeyDown(Keys.D2);
-            case 0x3:
-                return kstate.IsKeyDown(Keys.D3);
-            case 0x4:
-                return kstate.IsKeyDown(Keys.D4);
-            case 0x5:
-                return kstate.IsKeyDown(Keys.D5);
-            case 0x6:
-                return kstate.IsKeyDown(Keys.D6);
-            case 0x7:
-                return kstate.IsKeyDown(Keys.D7);
-            case 0x8:
-                return kstate.IsKeyDown(Keys.D8);
-            case 0x9:
-                return kstate.IsKeyDown(Keys.D9);
-            case 0xA:
-                return kstate.IsKeyDown(Keys.Q);
-            case 0xB:
-                return kstate.IsKeyDown(Keys.W);
-            case 0xC:
-                return kstate.IsKeyDown(Keys.A);
-            case 0xD:
-                return kstate.IsKeyDown(Keys.S);
-            case 0xE:
-                return kstate.IsKeyDown(Keys.Z);
-            case 0xF:
-                return kstate.IsKeyDown(Keys.X);
+            if (GetKeyCode(k) != 180)
+            {
+                temp_state |= (uint)0x1 << GetKeyCode(k);
+
+            }
+        }
+        _keysStates = temp_state;
+    }
+    public bool IsKeyPressed(byte key) => (_keysStates & (0x1 << key)) != 0;
+        
+    public byte GetKeyPressed() => _keyCode;
+    public bool AreKeysPressed() => _keysStates != 0;
+    private byte GetKeyCode(Keys k)
+    {
+        switch (k)
+        {
+            case Keys.NumPad0:
+                return 0x0;
+            case Keys.NumPad1:
+                return 0x1;
+            case Keys.NumPad2:
+                return 0x2;
+            case Keys.NumPad3:
+                return 0x3;
+            case Keys.NumPad4:
+                return 0x4;
+            case Keys.NumPad5:
+                return 0x5;
+            case Keys.NumPad6:
+                return 0x6;
+            case Keys.NumPad7:
+                return 0x7;
+            case Keys.NumPad8:
+                return 0x8;
+            case Keys.NumPad9:
+                return 0x9;
+            ///////Por encima de 9
+            case Keys.A:
+                return 0xA;
+            case Keys.B:
+                return 0xB;
+            case Keys.C:
+                return 0xC;
+            case Keys.D:
+                return 0xD;
+            case Keys.E:
+                return 0xE;
+            case Keys.F:
+                return 0xF;
             default:
-                return false;
+                return 180;
         }
     }
 }

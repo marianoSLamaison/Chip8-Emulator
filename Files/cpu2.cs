@@ -39,7 +39,11 @@ partial class Cpu
     }
     public void StoreNextKey(byte reg)
     {
-        
+
+        if (_keyboard.AreKeysPressed())
+            _v[reg] = _keyboard.GetKeyPressed();
+        else
+            _automatically_increment = false;
     }
     public void GetDelayTimer(byte reg)
     {
@@ -49,14 +53,15 @@ partial class Cpu
     {
         _delay_timer = _v[reg];
     }
-    public void SkipIfKeyNotPressed(byte key_code)
+    public void SkipIfKeyNotPressed(byte reg_code)
     {
-        if (!_keyboard.IsKeyPadPressed(key_code))
-            _ir +=  _inst_size;
+        if (!_keyboard.IsKeyPressed(_v[reg_code]))
+            _ir += _inst_size;
     }
-    public void SkipIfKeyPressed(byte key_code)
+    public void SkipIfKeyPressed(byte reg_code)
     {
-        if (_keyboard.IsKeyPadPressed(key_code))
+
+        if (_keyboard.IsKeyPressed(_v[reg_code]))
             _ir += _inst_size;
     }
     public void DrawToScreen(byte regX_id, byte regY_id, byte img_heigth)
@@ -86,7 +91,6 @@ partial class Cpu
     {
         byte holder = (byte)((_v[regy_id] & 0x80) >> 0x7);
         _v[regx_id] = (byte)(_v[regy_id] << 0x01);
-        _v[regy_id] = _v[regx_id];
         _v[0x0F] = holder;
     }
     public void SubtracRegXfromRegY(byte regx_id, byte regy_id)
@@ -96,7 +100,6 @@ partial class Cpu
         {
             _v[regx_id] = (byte)(_v[regy_id] - _v[regx_id]);
         }
-        Console.WriteLine("Needs a burrow to work = {0:b}", BitHelper.SubtractionNeedsBorrows(oldv2, oldv1));
         if (BitHelper.SubtractionNeedsBorrows(oldv2, oldv1))
             _v[0xF] = 0;
         else
@@ -106,7 +109,6 @@ partial class Cpu
     {
         byte holder = (byte)(_v[regy_id] & 0x01);
         _v[regx_id] = (byte)(_v[regy_id] >> 0x01);
-        _v[regy_id] = _v[regx_id];
         _v[0xF] = holder;
     }
     public void SubtractRegYfromX(byte regx_id, byte regy_id)
@@ -114,9 +116,8 @@ partial class Cpu
         ushort oldv1 = _v[regx_id], oldv2 = _v[regy_id];
         unchecked
         {
-            _v[regx_id] -= _v[regy_id];
+            _v[regx_id] = (byte)(_v[regx_id] - _v[regy_id]);
         }
-        Console.WriteLine("Needs a burrow to work = {0:b}", BitHelper.SubtractionNeedsBorrows(oldv1, oldv2));
         if (BitHelper.SubtractionNeedsBorrows(oldv1, oldv2))
             _v[0xF] = 0;
         else
@@ -124,7 +125,7 @@ partial class Cpu
     }
     public void AddRegisterYtoX(byte regx_id, byte regy_id)
     {
-        byte oldv1 = _v[regx_id], oldv2 = _v[regy_id];
+        byte oldv1 = _v[regx_id];
         unchecked
         {
             _v[regx_id] += _v[regy_id];
@@ -137,14 +138,17 @@ partial class Cpu
     public void LogicalXorRegXY(byte regx_id, byte regy_id)
     {
         _v[regx_id] ^= _v[regy_id];
+        _v[0xF] = 0;
     }
     public void LogicalAndRegXY(byte regx_id, byte regy_id)
     {
         _v[regx_id] &= _v[regy_id];        
+        _v[0xF] = 0;
     }
     public void LogicalOrRegXY(byte regx_id, byte regy_id)
     {
         _v[regx_id] |= _v[regy_id];
+        _v[0xF] = 0;
     }
     public void StroeRegYinRegX(byte regx_id, byte regy_id)
     {
@@ -152,7 +156,12 @@ partial class Cpu
     }
     public void AddToReg(byte reg_id, byte data)
     {
-        _v[reg_id] += data;
+        unchecked
+
+        {
+            _v[reg_id] += data;
+            Console.WriteLine("Register number {0:x} has the value {1:x}", reg_id, _v[reg_id]);
+        }
     }
     public void StoreInReg(byte reg_id, byte data)
     {
@@ -170,6 +179,7 @@ partial class Cpu
     }
     public void EsquipIfEcuals(byte reg_id, byte data)
     {
+        Console.WriteLine("Reg data = {0:x} value = {1:x}", _v[reg_id], data);
         if (_v[reg_id] == data)
             _ir += _inst_size;
     }

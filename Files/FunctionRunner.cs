@@ -98,6 +98,7 @@ class FunctionRunner
     {
         byte reg_id = (byte)BitHelper.GetMaskValue(args, _nible_mask, _nible_size * 2);
         byte data = (byte)BitHelper.GetMaskValue(args, _byte_mask, 0x0);   
+
         c.EsquipIfEcuals(reg_id, data);
     }
     public void Family4Execute( Cpu c, ushort args)

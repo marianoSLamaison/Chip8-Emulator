@@ -25,3 +25,6 @@
 #begin tests/4-flags.ch8
 /copy:tests/4-flags.ch8
 
+#begin tests/5-quirks.ch8
+/copy:tests/5-quirks.ch8
+
