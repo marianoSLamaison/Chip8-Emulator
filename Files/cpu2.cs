@@ -48,10 +48,12 @@ partial class Cpu
     public void GetDelayTimer(byte reg)
     {
         _v[reg] = _delay_timer;
+        Console.WriteLine("Timer has been consulted with value {0:x}", _v[reg]);
     }
     public void SetDelayTimer(byte reg)
     {
         _delay_timer = _v[reg];
+        Console.WriteLine("Timer has been set with value {0:x}", _v[reg]);
     }
     public void SkipIfKeyNotPressed(byte reg_code)
     {
@@ -160,7 +162,6 @@ partial class Cpu
 
         {
             _v[reg_id] += data;
-            Console.WriteLine("Register number {0:x} has the value {1:x}", reg_id, _v[reg_id]);
         }
     }
     public void StoreInReg(byte reg_id, byte data)
@@ -179,7 +180,6 @@ partial class Cpu
     }
     public void EsquipIfEcuals(byte reg_id, byte data)
     {
-        Console.WriteLine("Reg data = {0:x} value = {1:x}", _v[reg_id], data);
         if (_v[reg_id] == data)
             _ir += _inst_size;
     }

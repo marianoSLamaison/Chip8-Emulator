@@ -17,6 +17,7 @@ class FunctionRunner
     }
     public void ExecuteInstruction(Cpu c, Chip8DecodedInst inst)
     {
+        Console.WriteLine("Instruction code = {0:x} ; Instruction arguments = {1:x}", inst.OpFamily, inst.Args);
         switch ((OP_FAMILY)inst.OpFamily)
         {
             case OP_FAMILY.OP0:
@@ -213,10 +214,10 @@ class FunctionRunner
         switch(code)
         {
             case 0x07:
-                c.SetDelayTimer(reg);
+                c.GetDelayTimer(reg);
                 break;
             case 0x15://set or get the delay timer
-                c.GetDelayTimer(reg);
+                c.SetDelayTimer(reg);
                 break;
             case 0x0A://Stores last key pressed after instruction
                 c.StoreNextKey(reg);

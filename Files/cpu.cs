@@ -70,15 +70,29 @@ partial class Cpu
     /// <param name="inst"></param>
     private void execute(Chip8DecodedInst inst)
     {
-        _function_runner.ExecuteInstruction(this , inst);
+        _function_runner.ExecuteInstruction(this, inst);
     }
+    private int inst_completed = 0;
     public void Update(GameTime t)
     {
         _keyboard.Update();
-        if (_time_between_frames > 1/60)
+        if (_time_between_frames > 1 / 60)
         {
+            for (int i = 0; i < 12; i++)
+            {
+                Instruction_cicle();
+            }
+            inst_completed++;
+            if (inst_completed >= 5)
+            {
+                
+                _delay_timer = (byte)(_delay_timer > 0 ? _delay_timer - 1 : 0);
+                _sound_timer = (byte)(_sound_timer > 0 ? _sound_timer - 1 : 0);
+                inst_completed = 0;
+                Console.WriteLine("Timer value = {0:x}", _delay_timer);
+                
+            }
             _time_between_frames = 0.0f;
-            Instruction_cicle();
         }
         _time_between_frames += (float)t.ElapsedGameTime.TotalSeconds;
     }
