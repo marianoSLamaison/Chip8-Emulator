@@ -7,13 +7,15 @@ partial class Cpu
 {
     public void LoadStateUpToReg(byte reg)
     {
-        for (int i=0; i<=reg; i++)
+        for (int i = 0; i <= reg; i++)
             _v[i] = _mem.ReadByte((ushort)(_mar + i));
+        _mar += (ushort)(reg + 1);
     }
     public void SaveStateUpToReg(byte reg)
     {
-        for (int i=0; i<=reg; i++)
-            _mem.WriteByte((ushort)(_mar + i), _v[i]); 
+        for (int i = 0; i <= reg; i++)
+            _mem.WriteByte((ushort)(_mar + i), _v[i]);
+        _mar += (ushort)(reg + 1);
     }
     public void StoreBinaryCodedDecimalFromReg(byte reg)
     {
@@ -48,12 +50,10 @@ partial class Cpu
     public void GetDelayTimer(byte reg)
     {
         _v[reg] = _delay_timer;
-        Console.WriteLine("Timer has been consulted with value {0:x}", _v[reg]);
     }
     public void SetDelayTimer(byte reg)
     {
         _delay_timer = _v[reg];
-        Console.WriteLine("Timer has been set with value {0:x}", _v[reg]);
     }
     public void SkipIfKeyNotPressed(byte reg_code)
     {
@@ -69,6 +69,7 @@ partial class Cpu
     public void DrawToScreen(byte regX_id, byte regY_id, byte img_heigth)
     {
         _v[0x0F] = (byte)(_screen.SetPixel(_mem.GetScreenState(), _mem.GetSprite(_mar, img_heigth), _v[regX_id], _v[regY_id]) ? 1 : 0);
+        _i_drawed_to_screen = true;
     }
     public void RandomizeReg(byte reg_id, byte data)
     {

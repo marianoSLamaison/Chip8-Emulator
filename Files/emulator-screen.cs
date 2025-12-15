@@ -28,19 +28,28 @@ class Chip8Screen
     }
     public bool SetPixel(Span<byte> buffer, Span<byte> sprite, byte x_pos, byte y_pos)
     {
-        const byte _num_blocks_per_row = 8;
-        const byte _scr_heigth_bytes = 32;
+        const byte _bytes_in_a_row = 8;
+        const byte _logic_scr_heigth = 32;
         bool _pixels_have_been_set = false;
         byte _current_cell;
         byte _current_y, _current_x_cell, _current_x_bit;
+        if (x_pos > _bytes_in_a_row * 8) //if the sprite will not be drawn because it's outside of the screen
+            x_pos %= _bytes_in_a_row * 8;
+        if (y_pos > _logic_scr_heigth)
+            y_pos %= _logic_scr_heigth;
+
         for (int i=0; i<sprite.Length; i++)
         {
-            _current_y = (byte)((y_pos + i) % _scr_heigth_bytes);
+            if (y_pos + i >= _logic_scr_heigth)
+                continue;
+            _current_y = (byte)((y_pos + i) % _logic_scr_heigth);
             for (int j = 0; j < 8; j++)
             {
-                _current_x_cell = (byte)((x_pos + 7 - j) / _num_blocks_per_row);
+                if (x_pos + 7 - j >= _bytes_in_a_row * 8)
+                    continue;
+                _current_x_cell = (byte)((x_pos + 7 - j)/ _bytes_in_a_row);
                 _current_x_bit = (byte)((x_pos + 7-j) % 8);
-                _current_cell = (byte)(_current_y * _num_blocks_per_row + _current_x_cell);
+                _current_cell = (byte)(_current_y * _bytes_in_a_row + _current_x_cell);
                 _pixels_have_been_set |= (byte)((((sprite[i] >> j) & 0x1) << _current_x_bit) & buffer[_current_cell]) != 0;
                 buffer[_current_cell] ^= (byte)(((sprite[i] >> j) & 0x1) << _current_x_bit);
             }

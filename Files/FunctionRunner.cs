@@ -17,7 +17,7 @@ class FunctionRunner
     }
     public void ExecuteInstruction(Cpu c, Chip8DecodedInst inst)
     {
-        Console.WriteLine("Instruction code = {0:x} ; Instruction arguments = {1:x}", inst.OpFamily, inst.Args);
+        //Console.WriteLine("Instruction code = {0:x} ; Instruction arguments = {1:x}", inst.OpFamily, inst.Args);
         switch ((OP_FAMILY)inst.OpFamily)
         {
             case OP_FAMILY.OP0:

@@ -24,6 +24,7 @@ partial class Cpu
     ///////////////////////////////////////////////////////////
     private float _time_between_frames = 0.0f;
     private bool _automatically_increment = true;
+    private bool _i_drawed_to_screen = false;
 
     public Cpu(Viewport view, Point position)
     {
@@ -72,7 +73,6 @@ partial class Cpu
     {
         _function_runner.ExecuteInstruction(this, inst);
     }
-    private int inst_completed = 0;
     public void Update(GameTime t)
     {
         _keyboard.Update();
@@ -80,21 +80,21 @@ partial class Cpu
         {
             for (int i = 0; i < 12; i++)
             {
+                
+                if (_i_drawed_to_screen)
+                {
+                    _i_drawed_to_screen = false;
+                    goto AFTER_CLOCK_CICLE;
+                }
                 Instruction_cicle();
             }
-            inst_completed++;
-            if (inst_completed >= 5)
-            {
+            AFTER_CLOCK_CICLE:
                 
-                _delay_timer = (byte)(_delay_timer > 0 ? _delay_timer - 1 : 0);
-                _sound_timer = (byte)(_sound_timer > 0 ? _sound_timer - 1 : 0);
-                inst_completed = 0;
-                Console.WriteLine("Timer value = {0:x}", _delay_timer);
-                
-            }
+            _delay_timer = (byte)(_delay_timer > 0 ? _delay_timer - 1 : 0);
+            _sound_timer = (byte)(_sound_timer > 0 ? _sound_timer - 1 : 0);
             _time_between_frames = 0.0f;
         }
-        _time_between_frames += (float)t.ElapsedGameTime.TotalSeconds;
+        _time_between_frames +=1/ (float)t.ElapsedGameTime.TotalMilliseconds;
     }
 
     public void Load(ContentManager c, GraphicsDevice g)
