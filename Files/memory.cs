@@ -93,7 +93,7 @@ class Memory
             helper = new(_mem, 0, sprite_heigth - first_size);
             helper.ToArray().CopyTo(data, first_size);
             ret = new(data);
-            return ret;
+            return ret; 
         }
         return new(_mem, init_pos, sprite_heigth);
     }

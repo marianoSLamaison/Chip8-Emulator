@@ -10,6 +10,7 @@ partial class Cpu
 {
     private IO.Chip8Screen _screen;
     private IO.Chip8Keyboard _keyboard;
+    private IO.Chip8SoundManager _sound;
     private Memory _mem;
     private FunctionRunner _function_runner;
     //Registers//////////////////////////////////////////////
@@ -25,11 +26,13 @@ partial class Cpu
     private float _time_between_frames = 0.0f;
     private bool _automatically_increment = true;
     private bool _i_drawed_to_screen = false;
+    private const byte _treshhold_for_speaker = 0x02;
 
     public Cpu(Viewport view, Point position)
     {
         _mem = new();
         _screen = new(position.X, position.Y, view.Width / 2, view.Height / 2);
+        _sound = new();
         _keyboard = new();
         _function_runner = new();
         ///Registers  
@@ -95,7 +98,12 @@ partial class Cpu
                 Instruction_cicle();
             }
             AFTER_CLOCK_CICLE:
-                
+            
+            if (_sound_timer > _treshhold_for_speaker)
+            {
+                _sound.Play();
+            }
+
             _delay_timer = (byte)(_delay_timer > 0 ? _delay_timer - 1 : 0);
             _sound_timer = (byte)(_sound_timer > 0 ? _sound_timer - 1 : 0);
             _time_between_frames = 0.0f;
@@ -105,7 +113,8 @@ partial class Cpu
 
     public void Load(ContentManager c, GraphicsDevice g)
     {
-        _mem.Load("tests/oob_test_7.ch8", c);
+        _mem.Load("tests/7-beep.ch8", c);
+        _sound.Load(c);
         _screen.Load(g);
     }
     
