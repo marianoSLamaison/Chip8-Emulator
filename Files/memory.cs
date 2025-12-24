@@ -1,13 +1,16 @@
 using System;
+using System.Collections;
 using System.IO;
+using System.Linq;
 using Microsoft.Xna.Framework.Content;
 
 namespace Chip8Emu.cpu;
 
 class Memory
 {
-    private const ushort _mem_size = 7000;//4096;
-    private const ushort _display_space_start = 7000 - 64*32;//0xE8F ;
+    //NOTE: the quirks test uses more memory than 4K so it will not run here
+    private const ushort _mem_size = 4096;//4096;
+    private const ushort _display_space_start = 4096 - 64*32;//0xE8F ;
     private const ushort _user_space_start = 0x200;
     private const ushort _font_set_end = 0x80;
     private byte[] _mem;
@@ -55,12 +58,13 @@ class Memory
     public void Write(ushort dir, ushort arg)
     {
         //storing big endian way
-        _mem[dir] = (byte)BitHelper.GetMaskValue(arg, _by_mask, _by_size);
-        _mem[dir + 1] = (byte)BitHelper.GetMaskValue(arg, _by_mask, 0x00);
+
+        _mem[dir % _mem_size] = (byte)BitHelper.GetMaskValue(arg, _by_mask, _by_size);
+        _mem[(dir + 1) % _mem_size] = (byte)BitHelper.GetMaskValue(arg, _by_mask, 0x00);
     }
     public void WriteByte(ushort dir, byte arg)
     {
-        _mem[dir] = arg;
+        _mem[dir % _mem_size] = arg;
     }
     /// <summary>
     /// Reads a data from the memory
@@ -69,15 +73,28 @@ class Memory
     /// <returns></returns>
     public ushort Read(ushort dir)
     {
-        return (ushort)((ushort)(_mem[dir] << _by_size) + (ushort)_mem[dir + 1]);
+        return (ushort)((ushort)(_mem[dir % _mem_size] << _by_size) + (ushort)_mem[(dir + 1) % _mem_size]);
     }
     public byte ReadByte(ushort dir)
     {
-        return _mem[dir];
+        return _mem[dir % _mem_size];
     }
 
     public Span<byte> GetSprite(ushort init_pos, byte sprite_heigth)
     {
+        if (init_pos + sprite_heigth >= _mem_size)
+        {
+            //tenemos que partir la imagen
+            Span<byte> ret, helper;
+            byte[] data = new byte[sprite_heigth];
+            int first_size = _mem_size - init_pos;
+            helper = new(_mem, init_pos, first_size);
+            helper.ToArray().CopyTo(data, 0);
+            helper = new(_mem, 0, sprite_heigth - first_size);
+            helper.ToArray().CopyTo(data, first_size);
+            ret = new(data);
+            return ret;
+        }
         return new(_mem, init_pos, sprite_heigth);
     }
 

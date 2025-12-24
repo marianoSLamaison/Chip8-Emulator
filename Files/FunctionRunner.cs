@@ -197,6 +197,7 @@ class FunctionRunner
     public void FamilyEExecute(Cpu c, ushort args)
     {
         byte reg_id = (byte)BitHelper.GetMaskValue(args, _nible_mask, _nible_size * 2);
+        
         switch (args & 0x00FF)
         {
             case 0x009E:

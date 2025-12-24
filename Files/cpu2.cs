@@ -29,7 +29,7 @@ partial class Cpu
     }
     public void SetMarToSpriteData(byte reg)
     {
-        _mar = (ushort)(_v[reg] * _text_heigth);
+        _mar = (ushort)((_v[reg] % 0x10) * _text_heigth);
     }
     public void AddToMar(byte reg)
     {
@@ -41,9 +41,13 @@ partial class Cpu
     }
     public void StoreNextKey(byte reg)
     {
-
-        if (_keyboard.AreKeysPressed())
-            _v[reg] = _keyboard.GetKeyPressed();
+        byte key_released = _keyboard.GetFirstKeyReleased();
+        
+        if (key_released != IO.Chip8Keyboard.NOINPUTS)
+        {
+            StoreToVReg(reg, key_released);
+            //_v[reg] = key_released;
+        }
         else
             _automatically_increment = false;
     }
@@ -57,18 +61,21 @@ partial class Cpu
     }
     public void SkipIfKeyNotPressed(byte reg_code)
     {
-        if (!_keyboard.IsKeyPressed(_v[reg_code]))
+        //if (!_keyboard.IsKeyPressed(_v[reg_code]))
+        if (!_keyboard.IsKeyPressed((byte)(_v[reg_code] % 0x10)))
             _ir += _inst_size;
     }
     public void SkipIfKeyPressed(byte reg_code)
     {
 
-        if (_keyboard.IsKeyPressed(_v[reg_code]))
+        //if (_keyboard.IsKeyPressed(_v[reg_code]))
+        if (_keyboard.IsKeyPressed((byte)(_v[reg_code] % 0x10)))
             _ir += _inst_size;
     }
     public void DrawToScreen(byte regX_id, byte regY_id, byte img_heigth)
     {
         _v[0x0F] = (byte)(_screen.SetPixel(_mem.GetScreenState(), _mem.GetSprite(_mar, img_heigth), _v[regX_id], _v[regY_id]) ? 1 : 0);
+        
         _i_drawed_to_screen = true;
     }
     public void RandomizeReg(byte reg_id, byte data)

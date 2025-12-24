@@ -61,6 +61,12 @@ partial class Cpu
         ushort args = (ushort)(inst & 0x0FFF);
         return new(op_family, args);
     }
+    
+    private void StoreToVReg(byte reg_id, byte value)
+    {
+        //reg_id = (byte)((reg_id > 15) ? 0 : reg_id);    
+        _v[reg_id % 0x10] = value;
+    }
     /// <summary>
     /// Look, I know this is kinda dificult to follow,
     /// but Every instruction familie has it's how conditions to run X or Y method,
@@ -99,7 +105,7 @@ partial class Cpu
 
     public void Load(ContentManager c, GraphicsDevice g)
     {
-        _mem.Load("tests/5-quirks.ch8", c);
+        _mem.Load("tests/oob_test_7.ch8", c);
         _screen.Load(g);
     }
     
