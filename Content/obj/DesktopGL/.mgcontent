@@ -4,8 +4,8 @@
   <Platform>DesktopGL</Platform>
   <Config />
   <SourceFiles>
-    <File>C:/Users/famal/OneDrive/Escritorio/desarrollo/C#/Chip8-Emulator/Content/Audio/Sfx_01.mp3</File>
-    <File>C:/Users/famal/OneDrive/Escritorio/desarrollo/C#/Chip8-Emulator/Content/Fonts/standarFont.spritefont</File>
+    <File>c:/Users/famal/OneDrive/Escritorio/desarrollo/C#/Chip8-Emulator/Content/Audio/Sfx_01.mp3</File>
+    <File>c:/Users/famal/OneDrive/Escritorio/desarrollo/C#/Chip8-Emulator/Content/Fonts/standarFont.spritefont</File>
   </SourceFiles>
   <DestFiles>
     <File xsi:nil="true" />

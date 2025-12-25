@@ -19,6 +19,16 @@
 /processorParam:Quality=Best
 /build:Audio/Sfx_01.mp3
 
+#begin Fonts/AldotheApache.ttf
+/copy:Fonts/AldotheApache.ttf
+
+#begin Fonts/standarFont.spritefont
+/importer:FontDescriptionImporter
+/processor:FontDescriptionProcessor
+/processorParam:PremultiplyAlpha=True
+/processorParam:TextureFormat=Compressed
+/build:Fonts/standarFont.spritefont
+
 #begin tests/1-chip8-logo.ch8
 /copy:tests/1-chip8-logo.ch8
 

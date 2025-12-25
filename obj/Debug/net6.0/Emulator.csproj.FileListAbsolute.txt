@@ -59,3 +59,5 @@ c:\Users\famal\OneDrive\Escritorio\desarrollo\C#\Chip8-Emulator\bin\Debug\net6.0
 c:\Users\famal\OneDrive\Escritorio\desarrollo\C#\Chip8-Emulator\bin\Debug\net6.0\Content\tests\7-beep.ch8
 c:\Users\famal\OneDrive\Escritorio\desarrollo\C#\Chip8-Emulator\bin\Debug\net6.0\Content\Audio\Sfx_01.ogg
 c:\Users\famal\OneDrive\Escritorio\desarrollo\C#\Chip8-Emulator\bin\Debug\net6.0\Content\Audio\Sfx_01.xnb
+c:\Users\famal\OneDrive\Escritorio\desarrollo\C#\Chip8-Emulator\bin\Debug\net6.0\Content\Fonts\standarFont.xnb
+c:\Users\famal\OneDrive\Escritorio\desarrollo\C#\Chip8-Emulator\bin\Debug\net6.0\Content\Fonts\AldotheApache.ttf
