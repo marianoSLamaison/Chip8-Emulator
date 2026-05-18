@@ -35,6 +35,7 @@ public class Game1 : Game
         pixel.SetData<Color>(new[] {Color.White});
         _test_button.Load(pixel);
         //chip8.Load(Content, GraphicsDevice);
+        ///asd
         // TODO: use this.Content to load your game content here
     }
 
