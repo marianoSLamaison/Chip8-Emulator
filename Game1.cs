@@ -9,8 +9,8 @@ public class Game1 : Game
 {
     private GraphicsDeviceManager _graphics;
     private SpriteBatch _spriteBatch;
-    private Chip8Emu.cpu.Cpu chip8;
-    private EmuUi.TextBlock textBlockTest;
+    //private Chip8Emu.cpu.Cpu chip8;
+    private TestButton _test_button;
 
     public Game1()
     {
@@ -23,16 +23,18 @@ public class Game1 : Game
     protected override void Initialize()
     {
         // TODO: Add your initialization logic here
-        chip8 = new(GraphicsDevice.Viewport, new(100,100));
-        textBlockTest = new(new(0, 0, 100, 100), "hello macaronillele");
+        //chip8 = new(GraphicsDevice.Viewport, new(100,100));
+        _test_button = new(Vector2.Zero);
         base.Initialize();
     }
 
     protected override void LoadContent()
     {
         _spriteBatch = new SpriteBatch(GraphicsDevice);
-        chip8.Load(Content, GraphicsDevice);
-        textBlockTest.Load(Content);
+        Texture2D pixel = new Texture2D(GraphicsDevice, 1, 1);
+        pixel.SetData<Color>(new[] {Color.White});
+        _test_button.Load(pixel);
+        //chip8.Load(Content, GraphicsDevice);
         // TODO: use this.Content to load your game content here
     }
 
@@ -40,7 +42,7 @@ public class Game1 : Game
     {
         if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
             Exit();
-        chip8.Update(gameTime);
+        //chip8.Update(gameTime);
         // TODO: Add your update logic here
 
         base.Update(gameTime);
@@ -50,8 +52,8 @@ public class Game1 : Game
     {
         GraphicsDevice.Clear(Color.CornflowerBlue);
         _spriteBatch.Begin();
-        chip8.Draw(_spriteBatch);
-        textBlockTest.Draw(_spriteBatch);
+        //chip8.Draw(_spriteBatch);
+        _test_button.Draw(_spriteBatch);
         _spriteBatch.End();
         // TODO: Add your drawing code here
 

@@ -28,7 +28,7 @@ class TextBlock : ui_toolkit.UiBlock{
         for (int i=0; i<_displayable_text.Length; i++)
         {
             _displayable_text[i] = _text.Substring(
-                _chars_per_line * i, 
+                _chars_per_line * i,
                 MathHelper.Min(
                     _chars_per_line, 
                     MathHelper.Max(//para que no de calores negativos
